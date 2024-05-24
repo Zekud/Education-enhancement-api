@@ -6,5 +6,7 @@ import com.example.Edu.backend.model.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    User findByEmail(String email);
+
     
 } 

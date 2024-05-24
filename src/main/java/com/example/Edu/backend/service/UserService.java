@@ -10,7 +10,7 @@ import com.example.Edu.backend.repository.UserRepository;
 
 @Service
 public class UserService {
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -18,16 +18,23 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List <User> getAll (){
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    public User getById(Integer id){
-        return userRepository.findById(id).get();
+    public User getById(Integer id) {
+        return userRepository.findById(id).orElse(null);
     }
 
-    public void delete(Integer id){
+    public void delete(Integer id) {
         userRepository.deleteById(id);
     }
 
+    public User login(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null;
+    }
 }
