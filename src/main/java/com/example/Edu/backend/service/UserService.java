@@ -22,7 +22,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getById(Integer id) {
+    public User getById(int id) {
         return userRepository.findById(id).orElse(null);
     }
 
