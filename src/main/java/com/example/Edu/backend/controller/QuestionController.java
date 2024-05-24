@@ -2,7 +2,7 @@ package com.example.Edu.backend.controller;
 
 import java.util.List;
 
-import com.example.Edu.backend.QuestionRequest;
+import com.example.Edu.backend.QuestionResponse;
 import com.example.Edu.backend.model.Question;
 import com.example.Edu.backend.model.User;
 
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Edu.backend.service.QuestionService;
@@ -30,34 +29,23 @@ public class QuestionController {
     @Autowired
     private UserService userService;
     @GetMapping("/all")
-    public List<Question> getAllQuestions() {
+    public List<QuestionResponse> getAllQuestions() {
         return questionService.getAllQuestions();
     }
 
     @GetMapping("/get/{id}")
-    public Question getQuestionById(@PathVariable int id) {
+    public QuestionResponse getQuestionById(@PathVariable int id) {
         return questionService.getQuestionById(id);
     }
 
-    // @PostMapping("/create")
-    // public ResponseEntity<String> createQuestion(@RequestBody QuestionRequest questionRequest) {
-    //     User user = userService.getById(questionRequest.getUserId());
-    //     if (user == null) {
-    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
-    //     }
-    //     Question question = new Question();
-    //     question.setUser(user);
-    //     question.setQuestionText(questionRequest.getQuestionText());
-    //     questionService.createQuestion(question);
-    //     return ResponseEntity.status(HttpStatus.OK).body("Question created successfully");
-    // }
+   
     @PostMapping("/create/{userId}")
     public ResponseEntity<String> createQuestion(@PathVariable int userId, @RequestBody Map<String, Object> payload) {
     String questionText = (String) payload.get("questionText");
     User user = userService.getById(userId);
     if (user == null) {
         // handle error
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("UnAuthorized User");
     }
     Question question = new Question();
     question.setUser(user);
