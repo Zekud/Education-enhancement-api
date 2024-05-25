@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Edu.backend.service.AnswerService;
 import com.example.Edu.backend.service.QuestionService;
 import com.example.Edu.backend.service.UserService;
 
@@ -27,9 +26,6 @@ import com.example.Edu.backend.service.UserService;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
-    
-    @Autowired
-    private AnswerService answerService;
 
     @Autowired
     private UserService userService;
