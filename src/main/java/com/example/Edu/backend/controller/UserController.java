@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.Edu.backend.dto.CreatedResponse;
+import com.example.Edu.backend.dto.ErrorResponse;
 import com.example.Edu.backend.model.User;
 import com.example.Edu.backend.service.UserService;
 
@@ -18,9 +20,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/save")
-    public String save(@RequestBody User user) {
+    public ResponseEntity<?> save(@RequestBody User user) {
         userService.save(user);
-        return "user saved";
+        return new ResponseEntity<>(new CreatedResponse("User created successfully"), HttpStatus.CREATED);
     }
 
      @PostMapping("/login")
@@ -30,7 +32,7 @@ public class UserController {
             loggedInUser.setPassword(null); // Exclude password from the response
             return ResponseEntity.status(HttpStatus.OK).body(loggedInUser);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        return new ResponseEntity<>(new ErrorResponse("Invalid email or password"), HttpStatus.UNAUTHORIZED);
     }
     @GetMapping("/get")
     public List<User> getAll() {
@@ -40,6 +42,6 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Integer id) {
         User user = userService.getById(id);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 }
