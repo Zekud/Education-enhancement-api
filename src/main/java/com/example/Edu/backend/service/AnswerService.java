@@ -1,34 +1,46 @@
 package com.example.Edu.backend.service;
-import com.example.Edu.backend.model.Answer;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.Edu.backend.dto.AnswerResponse;
+import com.example.Edu.backend.model.Answer;
 import com.example.Edu.backend.repository.AnswerRepository;
+
 @Service
 public class AnswerService {
+
     @Autowired
-    private  AnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
-
-    public List <Answer> getAnswers() {
-        return answerRepository.findAll();
-    }
-//  i will check it out
-    @SuppressWarnings("unchecked")
-    public List <Answer> getAnswer(Integer id) {
-        return (List<Answer>) answerRepository.findById(id).get();
-    }
-
-    public Answer saveAnswer(Answer answer) {
-        return answerRepository.save(answer);
-    }
-
-    public void deleteAnswer(Integer id) {
-        answerRepository.deleteById(id);
+    public void saveAnswerForQuestion(int questionId, String answerText) {
+        // Assuming that the Answer entity has setQuestionId, setAnswerText methods.
+        Answer answer = new Answer();
+        answer.getQuestion().setId(questionId); // Add setter method for questionId
+        answer.setAnswerText(answerText);
+        answerRepository.save(answer);
     }
 
 
+
+    public AnswerResponse getAnswerById(int id) {
+        Optional<Answer> answerOptional = answerRepository.findById(id);
+        if (answerOptional.isPresent()) {
+            Answer answer = answerOptional.get();
+            // Assuming that the Answer entity has getAnswerId, getUserId, getQuestionId, getAnswerText methods.
+            return new AnswerResponse(
+                answer.getId(),
+                answer.getUser().getId(),
+                answer.getQuestion().getId(),
+                answer.getAnswerText()
+            );
+            
+        } else {
+            return null; 
+        }
+    }
+
+    // Other service methods...
 }
