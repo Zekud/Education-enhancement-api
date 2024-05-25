@@ -3,8 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.Edu.backend.QuestionResponse;
+import com.example.Edu.backend.dto.ErrorResponse;
 import com.example.Edu.backend.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.Edu.backend.repository.QuestionRepository;
@@ -14,8 +17,12 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public List<QuestionResponse> getAllQuestions() {
+    public ResponseEntity<?> getAllQuestions() {
         List<Question> questions = questionRepository.findAll();
+
+        if (questions.isEmpty()) {
+            return new ResponseEntity<>(new ErrorResponse("No questions found"), HttpStatus.NOT_FOUND);
+        }
         List<QuestionResponse> responses = new ArrayList<>();
 
         for (Question question : questions) {
@@ -25,19 +32,19 @@ public class QuestionService {
             response.setQuestionText(question.getQuestionText());
             responses.add(response);
         }
-        return responses;
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
-    public QuestionResponse getQuestionById(int id) {
+    public ResponseEntity<?> getQuestionById(int id) {
         Question question = questionRepository.findById(id).orElse(null);
          if (question == null) {
-            return null;
+            return new ResponseEntity<>(new ErrorResponse("Question not found"), HttpStatus.NOT_FOUND);
         }
         QuestionResponse response = new QuestionResponse();
         response.setQuestionId(question.getId());
         response.setUserId(question.getUser().getId());
         response.setQuestionText(question.getQuestionText());
-        return response;
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     public Question createQuestion(Question question) {

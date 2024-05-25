@@ -1,8 +1,6 @@
 package com.example.Edu.backend.controller;
 
-import java.util.List;
-
-import com.example.Edu.backend.QuestionResponse;
+import com.example.Edu.backend.dto.CreatedResponse;
 import com.example.Edu.backend.model.Question;
 import com.example.Edu.backend.model.User;
 
@@ -31,19 +29,19 @@ public class QuestionController {
     private UserService userService;
 
     @GetMapping("/all")
-    public List<QuestionResponse> getAllQuestions() {
+    public ResponseEntity<?> getAllQuestions() {
         return questionService.getAllQuestions();
     }
 
     @GetMapping("/get/{id}")
-    public QuestionResponse getQuestionById(@PathVariable int id) {
+    public ResponseEntity<?> getQuestionById(@PathVariable int id) {
        
         return questionService.getQuestionById(id);
     }
 
    
     @PostMapping("/create/{userId}")
-    public ResponseEntity<String> createQuestion(@PathVariable int userId, @RequestBody Map<String, Object> payload) {
+    public ResponseEntity<?> createQuestion(@PathVariable int userId, @RequestBody Map<String, Object> payload) {
     String questionText = (String) payload.get("questionText");
     User user = userService.getById(userId);
     if (user == null) {
@@ -54,12 +52,12 @@ public class QuestionController {
     question.setUser(user);
     question.setQuestionText(questionText);
     questionService.createQuestion(question);
-    return ResponseEntity.status(HttpStatus.OK).body("Question created successfully");
+    return new ResponseEntity<>(new CreatedResponse("Question created successfully"), HttpStatus.CREATED);
 }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteQuestion(@PathVariable int id) {
+    public ResponseEntity<?> deleteQuestion(@PathVariable int id) {
         questionService.deleteQuestion(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Deleted successfully");
+        return new ResponseEntity<>(new CreatedResponse("Question deleted successfully"), HttpStatus.OK);
     }
 
 }

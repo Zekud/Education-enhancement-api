@@ -6,11 +6,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.Edu.backend.dto.AnswerResponse;
+import com.example.Edu.backend.dto.ErrorResponse;
 import com.example.Edu.backend.model.Answer;
 import com.example.Edu.backend.model.Question;
 import com.example.Edu.backend.model.User;
@@ -33,18 +33,18 @@ public class AnswerService {
         
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         if (!questionOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("Question not found");
+            return new ResponseEntity<>(new ErrorResponse("Question not found"), HttpStatus.NOT_FOUND);
         }
         answer.setQuestion(questionOptional.get());
         Optional<User> userOptional = userRepository.findById(userId);
         if (!userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not exist");
+            return new ResponseEntity<>(new ErrorResponse("User not found"), HttpStatus.NOT_FOUND);
         }
         answer.setUser(userOptional.get());
 
         answer.setAnswerText(answerText);
         answerRepository.save(answer);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Answer Posted successfully");
+        return new ResponseEntity<>(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText()), HttpStatus.CREATED);
     }
 
 
@@ -57,14 +57,14 @@ public class AnswerService {
            return new ResponseEntity<AnswerResponse>(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText()), HttpStatus.OK);
             
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Answer not found"); 
+            return new ResponseEntity<>(new ErrorResponse("Answer not found"), HttpStatus.NOT_FOUND); 
         }
     }
 
     public ResponseEntity<?> getAnswersByQuestionId(int questionId) {
         Optional<Question> questionOptional = questionRepository.findById(questionId);
         if (!questionOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Question not found");
+            return new ResponseEntity<>(new ErrorResponse("Question not found"), HttpStatus.NOT_FOUND);
         }
         List<Answer> answers = answerRepository.findByQuestionId(questionId);
         List<AnswerResponse> answerResponse = new ArrayList<>();
@@ -73,7 +73,7 @@ public class AnswerService {
             answerResponse.add(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText()));
         }
         if (answerResponse.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No answers found for this question");
+            return new ResponseEntity<>(new ErrorResponse("No answers found"), HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.status(HttpStatus.OK).body(answerResponse);
 
