@@ -14,6 +14,7 @@ import com.example.Edu.backend.service.UserService;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin("http://localhost:5173")
 public class UserController {
 
     @Autowired
@@ -25,7 +26,7 @@ public class UserController {
         return new ResponseEntity<>(new CreatedResponse("User created successfully"), HttpStatus.CREATED);
     }
 
-     @PostMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         User loggedInUser = userService.login(user.getEmail(), user.getPassword());
         if (loggedInUser != null) {
