@@ -45,6 +45,7 @@ public class QuestionService {
         response.setQuestionId(question.getId());
         response.setUserId(question.getUser().getId());
         response.setQuestionText(question.getQuestionText());
+        response.setQuestionDescription(question.getQuestionDescription());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
