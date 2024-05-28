@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.Edu.backend.dto.CreatedResponse;
 import com.example.Edu.backend.dto.ErrorResponse;
 import com.example.Edu.backend.model.User;
+import com.example.Edu.backend.repository.UserRepository;
 import com.example.Edu.backend.service.UserService;
 
 @RestController
@@ -19,9 +20,13 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private UserRepository userRepository;
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody User user) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            return new ResponseEntity<>(new ErrorResponse("User already exists"), HttpStatus.CONFLICT);
+        }
         userService.save(user);
         return new ResponseEntity<>(new CreatedResponse("User created successfully"), HttpStatus.CREATED);
     }
