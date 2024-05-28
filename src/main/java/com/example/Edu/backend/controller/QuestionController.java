@@ -45,6 +45,7 @@ public class QuestionController {
     @PostMapping("/create/{userId}")
     public ResponseEntity<?> createQuestion(@PathVariable int userId, @RequestBody Map<String, Object> payload) {
     String questionText = (String) payload.get("questionText");
+    String questionDescription = (String) payload.get("questionDescription");
     User user = userService.getById(userId);
     if (user == null) {
         // handle error
@@ -53,7 +54,9 @@ public class QuestionController {
     Question question = new Question();
     question.setUser(user);
     question.setQuestionText(questionText);
+    question.setQuestionDescription(questionDescription);
     questionService.createQuestion(question);
+
     return new ResponseEntity<>(new CreatedResponse("Question created successfully"), HttpStatus.CREATED);
 }
     @DeleteMapping("/delete/{id}")

@@ -18,6 +18,7 @@ public class Question {
     private User user;
 
     private String questionText;
+    private String questionDescription;
 
     public Question() {
     }
@@ -45,5 +46,14 @@ public class Question {
     public void setQuestionText(String questionText) {
         this.questionText = questionText;
     }
+
+    public String getQuestionDescription() {
+        return questionDescription;
+    }
+
+    public void setQuestionDescription(String questionDescription) {
+        this.questionDescription = questionDescription;
+    }
+    
     
 }

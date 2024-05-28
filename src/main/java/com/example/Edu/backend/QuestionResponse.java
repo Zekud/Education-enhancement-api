@@ -4,6 +4,7 @@ public class QuestionResponse {
     private int questionId;
     private int userId;
     private String questionText;
+    private String questionDescription;
 
 
     
@@ -26,6 +27,14 @@ public class QuestionResponse {
     }
     public void setQuestionText(String questionText) {
         this.questionText = questionText;
+    }
+
+    public String getQuestionDescription() {
+        return questionDescription;
+    }
+
+    public void setQuestionDescription(String questionDescription) {
+        this.questionDescription = questionDescription;
     }
 
     // getters and setters
