@@ -31,6 +31,7 @@ public class QuestionService {
             response.setUserId(question.getUser().getId());
             response.setQuestionText(question.getQuestionText());
             response.setQuestionDescription(question.getQuestionDescription());
+            response.setUserName(question.getUser().getFname());
             responses.add(response);
         }
         return ResponseEntity.status(HttpStatus.OK).body(responses);

@@ -5,15 +5,17 @@ public class AnswerResponse {
     private int userId;
     private int questionId;
     private String answerText;
+    private String userName;
 
     // Constructors
     public AnswerResponse() {}
 
-    public AnswerResponse(int answerId, int userId, int questionId, String answerText) {
+    public AnswerResponse(int answerId, int userId, int questionId, String answerText, String userName) {
         this.answerId = answerId;
         this.userId = userId;
         this.questionId = questionId;
         this.answerText = answerText;
+        this.userName = userName;
     }
 
     // Getters and setters
@@ -47,5 +49,11 @@ public class AnswerResponse {
 
     public void setAnswerText(String answerText) {
         this.answerText = answerText;
+    }
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

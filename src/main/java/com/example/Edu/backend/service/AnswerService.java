@@ -44,7 +44,7 @@ public class AnswerService {
 
         answer.setAnswerText(answerText);
         answerRepository.save(answer);
-        return new ResponseEntity<>(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText(), answer.getUser().getFname()), HttpStatus.CREATED);
     }
 
 
@@ -54,7 +54,7 @@ public class AnswerService {
         if (answerOptional.isPresent()) {
             Answer answer = answerOptional.get();
             // Assuming that the Answer entity has getAnswerId, getUserId, getQuestionId, getAnswerText methods.
-           return new ResponseEntity<AnswerResponse>(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText()), HttpStatus.OK);
+           return new ResponseEntity<AnswerResponse>(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText(), answer.getUser().getFname()), HttpStatus.OK);
             
         } else {
             return new ResponseEntity<>(new ErrorResponse("Answer not found"), HttpStatus.NOT_FOUND); 
@@ -70,7 +70,7 @@ public class AnswerService {
         List<AnswerResponse> answerResponse = new ArrayList<>();
         for (Answer answer : answers) {
             // Assuming that the Answer entity has getAnswerId, getUserId, getQuestionId, getAnswerText methods.
-            answerResponse.add(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText()));
+            answerResponse.add(new AnswerResponse(answer.getId(), answer.getUser().getId(), answer.getQuestion().getId(), answer.getAnswerText(), answer.getUser().getFname()));
         }
         if (answerResponse.isEmpty()) {
             return new ResponseEntity<>(new ErrorResponse("No answers found"), HttpStatus.NOT_FOUND);

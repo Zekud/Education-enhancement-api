@@ -5,6 +5,7 @@ public class QuestionResponse {
     private int userId;
     private String questionText;
     private String questionDescription;
+    private String fname;
 
 
     
@@ -35,6 +36,14 @@ public class QuestionResponse {
 
     public void setQuestionDescription(String questionDescription) {
         this.questionDescription = questionDescription;
+    }
+
+    public String getUserName() {
+        return fname;
+    }
+
+    public void setUserName(String fname) {
+        this.fname = fname;
     }
 
     // getters and setters
